@@ -23,6 +23,8 @@ jobs:
         with:
           version: latest
       - name: Backup roles
+        run: echo "$supabase_db_url"
+      - name: Backup roles
         run: supabase db dump --db-url "$supabase_db_url" -f roles.sql --role-only
       - name: Backup schema
         run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
