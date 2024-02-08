@@ -31,6 +31,10 @@ jobs:
         run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
       - name: Backup data
         run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
+      - name: TEST
+        run: sudo systemctl start postgresql.service
+      - name: TEST
+        run: psql
 
       # - uses: stefanzweifel/git-auto-commit-action@v4
       #   with:
