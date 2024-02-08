@@ -20,17 +20,17 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-      # - uses: supabase/setup-cli@v1
-      #   with:
-      #     version: latest
-      # - name: Backup roles
-      #   run: echo "$supabase_db_url"
-      # - name: Backup roles
-      #   run: supabase db dump --db-url "$supabase_db_url" -f roles.sql --role-only
-      # - name: Backup schema
-      #   run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
-      # - name: Backup data
-      #   run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Backup roles
+        run: echo "$supabase_db_url"
+      - name: Backup roles
+        run: supabase db dump --db-url "$supabase_db_url" -f roles.sql --role-only
+      - name: Backup schema
+        run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
+      - name: Backup data
+        run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
