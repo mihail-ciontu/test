@@ -8,7 +8,26 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *' # Runs every day at midnight
-jobs:   
+jobs:
+  # restore:
+  #   runs-on: ubuntu-latest
+  #   environment: Prod
+  #   env:
+  #     supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
+  #   steps:
+  #     - uses: keithweaver/aws-s3-github-action@v1.0.0
+  #       with:
+  #         command: cp
+  #         source: s3://supabase/default/data.sql
+  #         destination: ./data.sql
+  #         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws_region: us-east-1
+  #         flags: --endpoint-url https://object.pscloud.io
+  #     - name: Activate postgresql
+  #       run: sudo systemctl start postgresql.service
+  #     - name: Restore
+  #       run: pg_restore "postgres://admin:admin@localhost:5432/postgres" --clean --if-exists data.sql
   run_db_backup:
     runs-on: ubuntu-latest
     environment: Prod
@@ -17,6 +36,8 @@ jobs:
     env:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
     steps:
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
@@ -31,19 +52,12 @@ jobs:
         run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
       - name: Backup data
         run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
-      - name: Activate postgresql
-        run: sudo systemctl start postgresql.service
-      - name: Restore
-        run: pg_restore "postgres://admin:admin@localhost:5432/postgres" --clean --if-exists data.sql
 
-      # - uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: Supabase backup
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
           source: ./data.sql
-          destination: s3://supabase/default/data.sql
+          destination: "s3://supabase/default/backups/${{ env.MY_DATE }}/data.sql"
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
