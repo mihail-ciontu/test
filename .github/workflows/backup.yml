@@ -34,20 +34,20 @@ jobs:
     permissions:
       contents: write
     env:
-      supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
+      supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
     steps:
       - name: Set current date as env variable
-        run: echo "NOW=$(date +'%Y-%m-%dT')" >> $GITHUB_ENV
+        run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
       - uses: supabase/setup-cli@v1
         with:
           version: latest
-      - name: Backup roles
-        run: supabase db dump --db-url "$supabase_db_url" -f roles.sql --role-only
-      # - name: Backup schema
-      #   run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
+      # - name: Backup roles
+      #   run: supabase db dump --db-url "$supabase_db_url" -f roles.sql --role-only
+      - name: Backup schema
+        run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
       # - name: Backup data
       #   run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
 
@@ -55,7 +55,7 @@ jobs:
         with:
           command: cp
           source: ./data.sql
-          destination: "s3://supabase/default/backups/${{ env.NOW }}/roles.sql"
+          destination: "s3://supabase/default/backups/${{ env.NOW }}/data.sql"
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
