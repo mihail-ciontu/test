@@ -31,10 +31,10 @@ jobs:
         run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
       - name: Backup data
         run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
-      - name: TEST
+      - name: Activate postgresql
         run: sudo systemctl start postgresql.service
-      - name: TEST
-        run: psql
+      - name: Restore
+        run: pg_restore "postgres://admin:admin@localhost:5432/postgres" --clean --if-exists data.sql
 
       # - uses: stefanzweifel/git-auto-commit-action@v4
       #   with:
