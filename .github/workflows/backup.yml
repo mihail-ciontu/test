@@ -11,6 +11,7 @@ on:
 jobs:   
   run_db_backup:
     runs-on: ubuntu-latest
+    environment: Prod
     permissions:
       contents: write
     env:
