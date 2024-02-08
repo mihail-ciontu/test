@@ -49,15 +49,15 @@ jobs:
       - name: Backup roles
         run: supabase db dump --db-url "$supabase_db_url" -f roles.sql --role-only
       - name: Backup schema
-        run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
-      - name: Backup data
-        run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
+      #   run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
+      # - name: Backup data
+      #   run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
 
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
           source: ./data.sql
-          destination: "s3://supabase/default/backups/${{ env.MY_DATE }}/data.sql"
+          destination: "s3://supabase/default/backups/${{ env.NOW }}/roles.sql"
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
