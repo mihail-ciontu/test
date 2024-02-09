@@ -38,5 +38,5 @@ jobs:
         - name: Activate postgresql
           run: sudo systemctl start postgresql.service
 
-        # - name: Restore
+        # - name: Restore database
         #   run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "$supabase_db_url"
