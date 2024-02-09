@@ -20,20 +20,20 @@ jobs:
           run: |
             echo "::error file={name},line={line},endLine={endLine},title={title}::DATABASE_RESTORE_DATE env var format has to be YYYY-MM-DD"
             exit 1
-        # - uses: keithweaver/aws-s3-github-action@v1.0.0
-        #   with:
-        #     command: cp
-        #     source: "s3://supabase/default/backups/${{ env.database_restore_date }}/backup.zip"
-        #     destination: ./backup.zip
-        #     aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        #     aws_region: us-east-1
-        #     flags: ${{ vars.S3_ACTION_FLAGS }}
-        # - uses: montudor/action-zip@v1
-        #   with:
-        #     args: unzip -qq backup.zip -d dir
-        # - name: Activate postgresql
-        #   run: sudo systemctl start postgresql.service
+        - uses: keithweaver/aws-s3-github-action@v1.0.0
+          with:
+            command: cp
+            source: "s3://supabase/default/backups/${{ env.database_restore_date }}/backup.zip"
+            destination: ./backup.zip
+            aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws_region: us-east-1
+            flags: ${{ vars.S3_ACTION_FLAGS }}
+        - uses: montudor/action-zip@v1
+          with:
+            args: unzip -qq backup.zip -d dir
+        - name: Activate postgresql
+          run: sudo systemctl start postgresql.service
 
         # - name: Restore
         #   run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "$supabase_db_url"
