@@ -10,17 +10,18 @@ jobs:
         supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
         database_restore_date: ${{ vars.DATABASE_RESTORE_DATE }} 
       steps:
-        - uses: actions-ecosystem/action-regex-match@v2
+        - name: Regex for DATABASE_RESTORE_DATE env var format
+          uses: actions-ecosystem/action-regex-match@v2
           id: regex-match
           with:
-            text: "$database_restore_date"
+            text: ${{ env.database_restore_date }}
             regex: '^\d{4}-\d{2}-\d{2}$'
         - name: Check if DATABASE_RESTORE_DATE env has good format
           if: ${{ steps.regex-match.outputs.match == '' }}
           run: |
             echo "::error file={name},line={line},endLine={endLine},title={title}::DATABASE_RESTORE_DATE env var format has to be YYYY-MM-DD"
             exit 1
-        - name: Fetch backup.zip from S3 - $database_restore_date
+        - name: Fetch backup.zip from S3 - ${{ env.database_restore_date }}
           uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
             command: cp
