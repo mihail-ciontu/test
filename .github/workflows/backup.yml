@@ -1,4 +1,4 @@
-name: production-backup
+name: database-backup
 
 on:
   # push:
@@ -27,15 +27,17 @@ jobs:
   #     - name: Activate postgresql
   #       run: sudo systemctl start postgresql.service
   #     - name: Restore
-  #       run: pg_restore "postgres://admin:admin@localhost:5432/postgres" --clean --if-exists data.sql
+  #       run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "postgres://postgres:your-super-secret-and-long-postgres-password@localhost:5432/postgres"
   run_db_backup:
     runs-on: ubuntu-latest
-    environment: Prod
+    environment: ${{ github.ref_name == 'main' && 'Prod' || 'develop' }}
     permissions:
       contents: write
     env:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
     steps:
+      - name: Echo
+        run: echo ${{ github.ref_name }}
       - name: Set current date as env variable
         run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
@@ -47,11 +49,11 @@ jobs:
       - name: Create backup folder
         run: mkdir backup
       - name: Backup roles
-        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/roles.sql --role-only
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/roles.dump --role-only
       - name: Backup schema
-        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/schema.sql
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/schema.dump
       - name: Backup data
-        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.sql --data-only --use-copy
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.dump --data-only --use-copy
       - uses: montudor/action-zip@v1
         with:
           args: zip -qq -r backup.zip backup
