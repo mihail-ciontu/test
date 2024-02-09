@@ -21,9 +21,9 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
-          flags: ${{ vars.S3_ACTION_FLAGS }} --recursive
+          flags: ${{ vars.S3_ACTION_FLAGS }} | wc -l
       - name: Pipe
-        run: echo ${{ toJSON(steps.s3) }}
+        run: echo ${{ toJSON(steps.s3.outputs) }} # this is {}
       # - name: Set current date as env variable
       #   run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       # - uses: actions/checkout@v3
