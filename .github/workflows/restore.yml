@@ -9,10 +9,14 @@ jobs:
       env:
         supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
         database_restore_date: ${{ vars.DATABASE_RESTORE_DATE }} 
-      # if: ${{ vars.DATABASE_RESTORE_DATE != null }}
       steps:
-        - name: Activate postgresql   
-          run: echo ${{ vars.DATABASE_RESTORE_DATE }}
+        - uses: actions-ecosystem/action-regex-match@v2
+          id: regex-match
+          with:
+            text: ${{ vars.DATABASE_RESTORE_DATE }}
+            regex: '^\d{4}-\d{2}-\d{2}$'
+        - name: Check if restore date env is set
+          run: echo ${{ steps.regex-match.outputs.match  }}
         # - uses: keithweaver/aws-s3-github-action@v1.0.0
         #   with:
         #     command: cp
