@@ -13,7 +13,7 @@ jobs:
         - uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
             command: cp
-            source: "s3://supabase/default/backups/${{ vars.DATABASE_RESTORE_DATE }}/backup.zip"
+            source: "s3://supabase/default/backups/${{ env.database_restore_date }}/backup.zip"
             destination: ./backup.zip
             aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -24,12 +24,8 @@ jobs:
             args: unzip -qq backup.zip -d backup
         - name: Activate postgresql
           run: sudo systemctl start postgresql.service
-        - name: echo ref_name
-          run: echo ${{ github.ref_name }} 
-        - name: echo
-          run: echo $database_restore_date 
         - name: ls
-          run: cd backup && ls 
+          run: cd backup && cd backup && ls 
 
         # - name: Restore
         #   run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "$supabase_db_url"
