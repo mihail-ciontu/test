@@ -14,12 +14,12 @@ jobs:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
     steps:
       - uses: keithweaver/aws-s3-github-action@v1.0.0
-          with:
-            command: ls
-            source: "s3://supabase/default/backups"
-            aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws_region: us-east-1
+        with:
+          command: ls
+          source: "s3://supabase/default/backups"
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
           # flags: ${{ vars.S3_ACTION_FLAGS }}
       # - name: Set current date as env variable
       #   run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
