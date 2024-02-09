@@ -7,7 +7,7 @@ on:
 jobs:
   run_db_backup:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'Prod' || 'develop' }}
+    environment: Prod
     permissions:
       contents: write
     env:
