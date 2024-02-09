@@ -12,7 +12,6 @@ jobs:
       contents: write
     env:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
-      today_date: ${{ date +'%Y-%m-%d' }}
     steps:
 
       # - name: Get list of backups saved on storage
@@ -28,28 +27,27 @@ jobs:
       # - name: Check list count from previous step
       #   run: echo ${{ toJSON(steps.s3.outputs) }} # this is {}
       - name: Set current date as env variable
-        # run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-        run: echo "$today_date"
-      # - uses: supabase/setup-cli@v1
-      #   with:
-      #     version: latest
-      # - name: Create backup folder
-      #   run: mkdir backup
-      # - name: Backup roles
-      #   run: supabase db dump --db-url "$supabase_db_url" -f ./backup/roles.sql --role-only
-      # - name: Backup schema
-      #   run: supabase db dump --db-url "$supabase_db_url" -f ./backup/schema.sql
-      # - name: Backup data
-      #   run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.sql --data-only --use-copy
-      # - uses: montudor/action-zip@v1
-      #   with:
-      #     args: zip -qq -r backup.zip backup
-      # - uses: keithweaver/aws-s3-github-action@v1.0.0
-      #   with:
-      #     command: cp
-      #     source: ./backup.zip
-      #     destination: "s3://supabase/default/backups/${{ env.NOW }}/backup.zip"
-      #     aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws_region: us-east-1
-      #     flags: ${{ vars.S3_ACTION_FLAGS }}
+        run: echo "TODAY_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Create backup folder
+        run: mkdir backup
+      - name: Backup roles
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/roles.sql --role-only
+      - name: Backup schema
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/schema.sql
+      - name: Backup data
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.sql --data-only --use-copy
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r backup.zip backup
+      - uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          command: cp
+          source: ./backup.zip
+          destination: "s3://supabase/default/backups/${{ env.TODAY_DATE }}/backup.zip"
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+          flags: ${{ vars.S3_ACTION_FLAGS }}
