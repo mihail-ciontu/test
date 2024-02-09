@@ -12,7 +12,7 @@ jobs:
       contents: write
     env:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
-      today_date: $(date +'%Y-%m-%d')
+      today_date: ${{ $(date +'%Y-%m-%d') }}
     steps:
 
       # - name: Get list of backups saved on storage
