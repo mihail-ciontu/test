@@ -15,8 +15,11 @@ jobs:
           with:
             text: ${{ vars.DATABASE_RESTORE_DATE }}
             regex: '^\d{4}-\d{2}-\d{2}$'
-        - name: Check if restore date env is set
-          run: ${{ steps.regex-match.outputs.match == '' && exit 1  }}
+        - name: Check if DATABASE_RESTORE_DATE env has good format
+          if: ${{ steps.regex-match.outputs.match == '' }}
+          run: |
+            echo "::error file={name},line={line},endLine={endLine},title={title}::{message}"
+            exit 1
         # - uses: keithweaver/aws-s3-github-action@v1.0.0
         #   with:
         #     command: cp
