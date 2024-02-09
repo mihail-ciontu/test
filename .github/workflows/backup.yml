@@ -44,6 +44,8 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: latest
+      - name: Create backup folder
+        run: mkdir backup
       # - name: Backup roles
       #   run: supabase db dump --db-url "$supabase_db_url" -f roles.sql --role-only
       # - name: Backup schema
