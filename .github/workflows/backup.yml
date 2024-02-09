@@ -9,26 +9,7 @@ on:
   schedule:
     - cron: '0 0 * * *' # Runs every day at midnight
 jobs:
-  # restore:
-  #   runs-on: ubuntu-latest
-    # environment: Prod
-  #   env:
-  #     supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
-  #   steps:
-  #     - uses: keithweaver/aws-s3-github-action@v1.0.0
-  #       with:
-  #         command: cp
-  #         source: s3://supabase/default/data.sql
-  #         destination: ./data.sql
-  #         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws_region: us-east-1
-  #         flags: --endpoint-url https://object.pscloud.io
-  #     - name: Activate postgresql
-  #       run: sudo systemctl start postgresql.service
-  #     - name: Restore
-  #       run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "postgres://postgres:your-super-secret-and-long-postgres-password@localhost:5432/postgres"
-  run_db_backup:
+   run_db_backup:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'Prod' || 'develop' }}
     permissions:

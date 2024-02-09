@@ -21,11 +21,11 @@ jobs:
             flags: --endpoint-url https://object.pscloud.io
         - uses: montudor/action-zip@v1
           with:
-            args: unzip -qq backup.zip -d backup
+            args: unzip -qq backup.zip -d dir
         - name: Activate postgresql
           run: sudo systemctl start postgresql.service
         - name: ls
-          run: cd backup && cd backup && ls 
+          run: cp -a ./dir/backup/. . && ls 
 
         # - name: Restore
         #   run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "$supabase_db_url"
