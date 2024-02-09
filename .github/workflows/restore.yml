@@ -9,8 +9,10 @@ jobs:
       env:
         supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
         database_restore_date: ${{ vars.DATABASE_RESTORE_DATE }} 
-      if: ${{ vars.DATABASE_RESTORE_DATE != null }}
+      # if: ${{ vars.DATABASE_RESTORE_DATE != null }}
       steps:
+        - name: Activate postgresql   
+          run: echo ${{ vars.DATABASE_RESTORE_DATE }}
         - uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
             command: cp
@@ -19,7 +21,7 @@ jobs:
             aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws_region: us-east-1
-            flags: ${{ env.S3_ACTION_FLAGS }}
+            flags: ${{ vars.S3_ACTION_FLAGS }}
         - uses: montudor/action-zip@v1
           with:
             args: unzip -qq backup.zip -d dir
