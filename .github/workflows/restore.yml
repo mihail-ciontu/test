@@ -13,7 +13,7 @@ jobs:
         - uses: actions-ecosystem/action-regex-match@v2
           id: regex-match
           with:
-            text: $database_restore_date
+            text: "$database_restore_date"
             regex: '^\d{4}-\d{2}-\d{2}$'
         - name: Check if DATABASE_RESTORE_DATE env has good format
           if: ${{ steps.regex-match.outputs.match == '' }}
