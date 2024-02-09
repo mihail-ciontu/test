@@ -23,7 +23,7 @@ jobs:
           aws_region: us-east-1
           flags: ${{ vars.S3_ACTION_FLAGS }} --recursive
       - name: Pipe
-        run: echo ${{ steps.s3.outputs }}
+        run: echo ${{ steps.s3.outputs }} >> test.json && cat test.json
       # - name: Set current date as env variable
       #   run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       # - uses: actions/checkout@v3
