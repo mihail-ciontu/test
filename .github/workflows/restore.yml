@@ -5,11 +5,11 @@ on: workflow_dispatch
 jobs:
   restore:
       runs-on: ubuntu-latest
-      environment: ${{ github.ref_name }}
+      environment: Prod
       env:
         supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
         database_restore_date: ${{ vars.DATABASE_RESTORE_DATE }} 
-      if: true
+      if: ${{ vars.DATABASE_RESTORE_DATE }}
       steps:
         - uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
