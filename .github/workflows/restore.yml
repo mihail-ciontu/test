@@ -13,14 +13,15 @@ jobs:
         - uses: actions-ecosystem/action-regex-match@v2
           id: regex-match
           with:
-            text: ${{ vars.DATABASE_RESTORE_DATE }}
+            text: $database_restore_date
             regex: '^\d{4}-\d{2}-\d{2}$'
         - name: Check if DATABASE_RESTORE_DATE env has good format
           if: ${{ steps.regex-match.outputs.match == '' }}
           run: |
             echo "::error file={name},line={line},endLine={endLine},title={title}::DATABASE_RESTORE_DATE env var format has to be YYYY-MM-DD"
             exit 1
-        - uses: keithweaver/aws-s3-github-action@v1.0.0
+        - name: Fetch backup.zip from S3 - $database_restore_date
+          uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
             command: cp
             source: "s3://supabase/default/backups/${{ env.database_restore_date }}/backup.zip"
@@ -29,7 +30,8 @@ jobs:
             aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws_region: us-east-1
             flags: ${{ vars.S3_ACTION_FLAGS }}
-        - uses: montudor/action-zip@v1
+        - name: Unzip backup.zip
+          uses: montudor/action-zip@v1
           with:
             args: unzip -qq backup.zip -d dir
         - name: Activate postgresql
