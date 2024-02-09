@@ -8,7 +8,7 @@ jobs:
       environment: ${{ github.ref_name == 'main' && 'Prod' || 'develop' }}
       env:
         supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
-        database_restore_data: ${{ env.DATABASE_RESTORE_DATE }} 
+        database_restore_data: ${{ vars.DATABASE_RESTORE_DATE }} 
       steps:
         - uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
