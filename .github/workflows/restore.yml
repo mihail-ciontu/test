@@ -5,7 +5,7 @@ on: workflow_dispatch
 jobs:
   restore:
       runs-on: ubuntu-latest
-      environment: ${{ github.ref_name == 'main' && 'Prod' || 'develop' }}
+      environment: Prod
       env:
         supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
         database_restore_data: ${{ vars.DATABASE_RESTORE_DATE }} 
@@ -21,7 +21,7 @@ jobs:
             flags: --endpoint-url https://object.pscloud.io
         - uses: montudor/action-zip@v1
           with:
-            args: zip -qq -r backup.zip -d backup
+            args: unzip -qq -r backup.zip -d backup
         - name: Activate postgresql
           run: sudo systemctl start postgresql.service
         - name: echo ref_name
