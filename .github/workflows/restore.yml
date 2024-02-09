@@ -5,10 +5,11 @@ on: workflow_dispatch
 jobs:
   restore:
       runs-on: ubuntu-latest
-      environment: ${{ github.ref_name == 'main' && 'Prod' || 'develop' }}
+      environment: ${{ github.ref_name }}
       env:
-        supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
+        supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
         database_restore_date: ${{ vars.DATABASE_RESTORE_DATE }} 
+      if: ${{ vars.DATABASE_RESTORE_DATE }}
       steps:
         - uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
@@ -24,8 +25,6 @@ jobs:
             args: unzip -qq backup.zip -d dir
         - name: Activate postgresql
           run: sudo systemctl start postgresql.service
-        - name: ls
-          run: cp -a ./dir/backup/. . && ls 
 
         # - name: Restore
         #   run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "$supabase_db_url"

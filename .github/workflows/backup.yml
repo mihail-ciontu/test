@@ -30,11 +30,11 @@ jobs:
       - name: Create backup folder
         run: mkdir backup
       - name: Backup roles
-        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/roles.dump --role-only
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/roles.sql --role-only
       - name: Backup schema
-        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/schema.dump
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/schema.sql
       - name: Backup data
-        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.dump --data-only --use-copy
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.sql --data-only --use-copy
       - uses: montudor/action-zip@v1
         with:
           args: zip -qq -r backup.zip backup
