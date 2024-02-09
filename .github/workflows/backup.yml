@@ -1,15 +1,11 @@
 name: database-backup
 
 on:
-  # push:
-  #   branches: [ main ]
-  # pull_request:
-  #   branches: [ main ]
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *' # Runs every day at midnight
 jobs:
-   run_db_backup:
+  run_db_backup:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'Prod' || 'develop' }}
     permissions:
