@@ -18,7 +18,7 @@ jobs:
         - name: Check if DATABASE_RESTORE_DATE env has good format
           if: ${{ steps.regex-match.outputs.match == '' }}
           run: |
-            echo "::error file={name},line={line},endLine={endLine},title={title}::{message}"
+            echo "::error file={name},line={line},endLine={endLine},title={title}::DATABASE_RESTORE_DATE env var format has to be YYYY-MM-DD"
             exit 1
         # - uses: keithweaver/aws-s3-github-action@v1.0.0
         #   with:
