@@ -1,9 +1,6 @@
 name: database-restore
-on:
-  push:
-    branches: [ ]
-  # pull_request:
-  #   branches: [ main ]
+
+on: workflow_dispatch
     
 jobs:
   restore:
@@ -11,12 +8,12 @@ jobs:
       environment: ${{ github.ref_name == 'main' && 'Prod' || 'develop' }}
       env:
         supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
-        database_restore_data: ${{ secrets.DATABASE_RESTORE_DATE }} 
+        database_restore_data: ${{ env.DATABASE_RESTORE_DATE }} 
       steps:
         - uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
             command: cp
-            source: "s3://supabase/default/backups/${{ database_restore_date }}/backup.zip"
+            source: "s3://supabase/default/backups/${{ env.database_restore_date }}/backup.zip"
             destination: ./backup.zip
             aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
