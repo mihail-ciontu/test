@@ -1,17 +1,17 @@
-name: Supa-backup
+name: production-backup
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *' # Runs every day at midnight
 jobs:
   # restore:
   #   runs-on: ubuntu-latest
-  #   environment: Prod
+    # environment: Prod
   #   env:
   #     supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   # For example: postgresql://postgres:[YOUR-PASSWORD]@db.<ref>.supabase.co:5432/postgres
   #   steps:
@@ -49,13 +49,16 @@ jobs:
       # - name: Backup schema
       #   run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
       - name: Backup data
-        run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
-
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.sql --data-only --use-copy
+      # TODO: Compression
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r backup.zip backup
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
           source: ./data.sql
-          destination: "s3://supabase/default/backups/${{ env.NOW }}/data.sql"
+          destination: "s3://supabase/default/backups/${{ env.NOW }}/backup.zip"
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
