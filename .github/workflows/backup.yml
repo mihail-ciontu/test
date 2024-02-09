@@ -23,10 +23,7 @@ jobs:
           aws_region: us-east-1
           flags: ${{ vars.S3_ACTION_FLAGS }} --recursive
       - name: Pipe
-        run: echo ${{ toJSON(steps.s3.outputs) }} >> test.json
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Supabase backup
+        run: echo ${{ toJSON(steps.s3) }}
       # - name: Set current date as env variable
       #   run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       # - uses: actions/checkout@v3

@@ -5,7 +5,7 @@ on: workflow_dispatch
 jobs:
   restore:
     runs-on: ubuntu-latest
-    environment: Prod
+    environment: ${{ github.ref_name }}
     env:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
       database_restore_date: ${{ vars.DATABASE_RESTORE_DATE }} 
@@ -37,6 +37,5 @@ jobs:
           args: unzip -qq backup.zip -d dir
       - name: Activate postgresql
         run: sudo systemctl start postgresql.service
-
-      # - name: Restore database
-      #   run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "$supabase_db_url"
+      - name: Restore database
+        run: psql -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"--file roles.sql --file schema.sql --command 'SET session_replication_role = replica' --file data.sql --dbname "$supabase_db_url"
