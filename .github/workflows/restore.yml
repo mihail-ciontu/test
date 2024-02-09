@@ -9,7 +9,7 @@ jobs:
       env:
         supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
         database_restore_date: ${{ vars.DATABASE_RESTORE_DATE }} 
-      if: ${{ vars.DATABASE_RESTORE_DATE }}
+      if: ${{ vars.DATABASE_RESTORE_DATE != null }}
       steps:
         - uses: keithweaver/aws-s3-github-action@v1.0.0
           with:
