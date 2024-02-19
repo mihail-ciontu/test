@@ -28,7 +28,7 @@ jobs:
       - name: Save backup to delete if exists
         if: ${{ env.BACKUP_COUNT }} > 0
         run: |
-           echo "DELETE_BACKUP=$("echo -n ${{ env.BACKUP_DIRS }}" | head -n 1 | sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')" >> $GITHUB_ENV
+           echo "DELETE_BACKUP=$("echo -n "${{ env.BACKUP_DIRS }}" | head -n 1 | sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')" >> $GITHUB_ENV
       - name: Delete old backup file if exists
         run: echo ${{ env.DELETE_BACKUP }}
       # - name: Delete old backup file if exists
