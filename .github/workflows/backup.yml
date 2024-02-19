@@ -37,34 +37,30 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'us-east-1'
-      # - name: Delete old backup file if exists
-      #   if: ${{ env.DELETE_BACKUP }} != null
-      #   run: |
-      #      aws s3 rm "s3://supabase/default/backups/${{ env.DELETE_BACKUP }}" --endpoint-url https://object.pscloud.io --recursive
-      # - uses: supabase/setup-cli@v1
-      #   with:
-      #     version: latest
-      # - name: Set current date as env variable
-      #   run: echo "TODAY_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-      # - name: Create backup folder
-      #   run: mkdir backup
-      # - name: Backup roles
-      #   run: supabase db dump --db-url "$supabase_db_url" -f ./backup/roles.sql --role-only
-      # - name: Backup schema
-      #   run: supabase db dump --db-url "$supabase_db_url" -f ./backup/schema.sql
-      # - name: Backup data
-      #   run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.sql --data-only --use-copy
-      # - name: Zip backup.zip
-      #   uses: montudor/action-zip@v1
-      #   with:
-      #     args: zip -qq -r backup.zip backup
-      # - name: Upload backup.zip to S3 - ${{ env.TODAY_DATE }} -
-      #   uses: keithweaver/aws-s3-github-action@v1.0.0
-      #   with:
-      #     command: cp
-      #     source: ./backup.zip
-      #     destination: "s3://supabase/default/backups/${{ env.TODAY_DATE }}/backup.zip"
-      #     aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws_region: us-east-1
-      #     flags: ${{ vars.S3_ACTION_FLAGS }}
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Set current date as env variable
+        run: echo "TODAY_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      - name: Create backup folder
+        run: mkdir backup
+      - name: Backup roles
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/roles.sql --role-only
+      - name: Backup schema
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/schema.sql
+      - name: Backup data
+        run: supabase db dump --db-url "$supabase_db_url" -f ./backup/data.sql --data-only --use-copy
+      - name: Zip backup.zip
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r backup.zip backup
+      - name: Upload backup.zip to S3 - ${{ env.TODAY_DATE }} -
+        uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          command: cp
+          source: ./backup.zip
+          destination: "s3://supabase/default/backups/${{ env.TODAY_DATE }}/backup.zip"
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+          flags: ${{ vars.S3_ACTION_FLAGS }}
