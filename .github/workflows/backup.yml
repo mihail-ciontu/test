@@ -59,7 +59,7 @@ jobs:
         with:
           command: cp
           source: ./backup.zip
-          destination: "s3://supabase/default/backups/${{ env.TODAY_DATE }}/backup.zip"
+          destination: "s3://supabase/default/backups/2024-02-20/backup.zip"
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
