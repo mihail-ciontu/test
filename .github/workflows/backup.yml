@@ -23,11 +23,11 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'us-east-1'
-      - name: Save backup count
+      - name: Save backups count
         run: |
            echo "BACKUP_COUNT=$(echo -n "${{ env.BACKUP_DIRS }}" | grep -c '^')" >> $GITHUB_ENV
       - name: Save backup to delete if exists
-        if: ${{ env.BACKUP_COUNT > 0 }} 
+        if: ${{ env.BACKUP_COUNT > vars.BACKUP_KEEP_DAYS }} 
         run: |
            echo "DELETE_BACKUP=$(echo -n "${{ env.BACKUP_DIRS }}" | head -n 1 | sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')" >> $GITHUB_ENV
       - name: Delete old backup file if exists
