@@ -23,7 +23,7 @@ jobs:
         run: |
           {
             echo 'BACKUP_COUNT<<EOF'
-            aws s3 ls s3://supabase/default/backups --endpoint-url https://object.pscloud.io
+            aws s3 ls s3://supabase/default/backups/ --endpoint-url https://object.pscloud.io
             echo EOF
           } >> "$GITHUB_ENV"
         env:
