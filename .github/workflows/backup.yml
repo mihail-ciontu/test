@@ -21,8 +21,11 @@ jobs:
           # aws-region: us-east-1
       - name: Get list of backups saved on storage
         run: |
-          echo "BACKUPS_DIRS=$(aws s3 ls s3://supabase/default/backups/ --endpoint-url https://object.pscloud.io)" >> $GITHUB_ENV
-          echo "$BACKUPS_DIRS" >> $GITHUB_ENV 
+          {
+            echo 'BACKUP_COUNT<<EOF'
+            aws s3 ls s3://supabase/default/backups --endpoint-url https://object.pscloud.io
+            echo EOF
+          } >> "$GITHUB_ENV"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
