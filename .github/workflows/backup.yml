@@ -36,7 +36,7 @@ jobs:
       - name: Get list of backups saved on storage
         if: ${{ env.BACKUP_COUNT }} > 10
         run: |
-           echo -n "${{ env.BACKUP_DIRS }}" | head -n 1 | sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/'
+           echo -n "${{ env.BACKUP_DIRS }}" | head -n 1 | export TEST=$(sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/') | echo "$TEST"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
