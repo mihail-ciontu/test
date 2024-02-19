@@ -36,15 +36,17 @@ jobs:
       - name: Save backup to delete if exists
         if: ${{ env.BACKUP_COUNT }} > 10
         run: |
-           echo "DELETE_BACKUP=$("${{ env.BACKUP_DIRS }}" | head -n 1 | sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')" >> $GITHUB_ENV
+           echo "DELETE_BACKUP=$("echo -n ${{ env.BACKUP_DIRS }}" | head -n 1 | sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')" >> $GITHUB_ENV
       - name: Delete old backup file if exists
-        if: ${{ env.DELETE_BACKUP }} != null
-        run: |
-           aws s3 rm "s3://supabase/default/backups/${{ env.DELETE_BACKUP }}" --endpoint-url https://object.pscloud.io --recursive
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+        run: echo ${{ env.DELETE_BACKUP }}
+      # - name: Delete old backup file if exists
+      #   if: ${{ env.DELETE_BACKUP }} != null
+      #   run: |
+      #      aws s3 rm "s3://supabase/default/backups/${{ env.DELETE_BACKUP }}" --endpoint-url https://object.pscloud.io --recursive
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_DEFAULT_REGION: 'us-east-1'
       # - uses: supabase/setup-cli@v1
       #   with:
       #     version: latest
