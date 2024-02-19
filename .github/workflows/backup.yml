@@ -32,7 +32,7 @@ jobs:
           AWS_DEFAULT_REGION: 'us-east-1'
       - name: Get count of backups saved on storage and save to env var
         run: |
-           echo "BACKUP_COUNT=$("${{ env.BACKUP_DIRS }}" | wc -l)" >> $GITHUB_ENV
+           echo "BACKUP_COUNT=$(${{ env.BACKUP_DIRS }} | wc -l)" >> $GITHUB_ENV
       - name: Get list of backups saved on storage
         run: |
           echo "${{ env.BACKUPS_COUNT }}"
