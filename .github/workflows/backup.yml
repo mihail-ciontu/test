@@ -26,17 +26,16 @@ jobs:
             aws s3 ls s3://supabase/default/backups/ --endpoint-url https://object.pscloud.io
             echo EOF
           } >> "$GITHUB_ENV"
-           echo "BACKUP_COUNT=$($BACKUP_DIRS | wc -l)" >> $GITHUB_ENV
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'us-east-1'
-      # - name: Get count of backups saved on storage and save to env var
-      #   run: |
-      #     echo "FOO=$(AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} aws s3 ls s3://supabase/default/backups --endpoint-url https://object.pscloud.io | wc -l)" >> $GITHUB_ENV
-      # - name: Get list of backups saved on storage
-      #   run: |
-      #     echo "${{ env.BACKUPS_COUNT }}"
+      - name: Get count of backups saved on storage and save to env var
+        run: |
+           echo "BACKUP_COUNT=$("${{ env.BACKUP_DIRS }}" | wc -l)" >> $GITHUB_ENV
+      - name: Get list of backups saved on storage
+        run: |
+          echo "${{ env.BACKUPS_COUNT }}"
       # - uses: supabase/setup-cli@v1
       #   with:
       #     version: latest
