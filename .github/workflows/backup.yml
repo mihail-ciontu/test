@@ -12,19 +12,19 @@ jobs:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
     steps:
       # get list of objects saved on s3 storage via github action step
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        id: s3
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   id: s3
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # aws-region: us-east-1
-      # - name: Get list of backups saved on storage
-      #   run: |
-      #     aws s3 ls s3://supabase/default/backups --endpoint-url https://object.pscloud.io | wc -l
-      - name: Get count of backups saved on storage and save to env var
+      - name: Get list of backups saved on storage
         run: |
-          echo "FOO=$(aws s3 ls s3://supabase/default/backups --endpoint-url https://object.pscloud.io | wc -l)" >> $GITHUB_ENV
+          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} aws s3 ls s3://supabase/default/backups --endpoint-url https://object.pscloud.io | wc -l
+      # - name: Get count of backups saved on storage and save to env var
+      #   run: |
+      #     echo "FOO=$(aws s3 ls s3://supabase/default/backups --endpoint-url https://object.pscloud.io | wc -l)" >> $GITHUB_ENV
       - name: Get list of backups saved on storage
         run: |
           echo "${{ env.FOO }}"
