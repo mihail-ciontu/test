@@ -26,12 +26,12 @@ jobs:
         run: |
            echo "BACKUP_COUNT=$(echo -n "${{ env.BACKUP_DIRS }}" | grep -c '^')" >> $GITHUB_ENV
       - name: Save backup to delete if exists
-        if: ${{ env.BACKUP_COUNT > 3 }} 
+        if: ${{ env.BACKUP_COUNT > 0 }} 
         run: |
            echo "DELETE_BACKUP=$(echo -n "${{ env.BACKUP_DIRS }}" | head -n 1 | sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')" >> $GITHUB_ENV
       - name: Delete old backup file if exists
-        if: ${{ env.DELETE_BACKUP == '' }}
-        run: echo "yes"
+        if: ${{ env.DELETE_BACKUP != '' }}
+        run: aws s3 rm "s3://supabase/default/backups/${{ env.DELETE_BACKUP }}" --endpoint-url https://object.pscloud.io --recursive
       # - name: Delete old backup file if exists
       #   if: ${{ env.DELETE_BACKUP }} != null
       #   run: |
