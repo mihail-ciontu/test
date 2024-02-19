@@ -30,7 +30,8 @@ jobs:
         run: |
            ${{ env.BACKUP_COUNT }} == "test" && echo "DELETE_BACKUP=$(echo -n "${{ env.BACKUP_DIRS }}" | head -n 1 | sed -E 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')" >> $GITHUB_ENV || echo "no"
       - name: Delete old backup file if exists
-        run: ${{ env.DELETE_BACKUP }} == "" && echo "yes" || "no"
+        if: ${{ env.DELETE_BACKUP == '' }}
+        run: echo "yes"
       # - name: Delete old backup file if exists
       #   if: ${{ env.DELETE_BACKUP }} != null
       #   run: |
