@@ -7,7 +7,7 @@ on:
 jobs:
   run_db_backup:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    environment: Prod
     env:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
     steps:
