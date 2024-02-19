@@ -34,8 +34,8 @@ jobs:
         run: |
            echo "BACKUP_COUNT=$(echo -n "${{ env.BACKUP_DIRS }}" | grep -c '^')" >> $GITHUB_ENV
       - name: Get list of backups saved on storage
-        run: |
-          echo "${{ env.BACKUPS_COUNT }}"
+        if: ${{ env.BACKUP_COUNT }} > 10
+        run: echo "yes"
       # - uses: supabase/setup-cli@v1
       #   with:
       #     version: latest
