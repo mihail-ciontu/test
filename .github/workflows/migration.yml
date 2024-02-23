@@ -16,7 +16,7 @@ jobs:
           version: latest
       - uses: actions/checkout@v4
       - name: Pull changes
-        run: supabase db link --project-ref ${{env.PROJECT_ID}}
+        run: supabase link --project-ref ${{env.PROJECT_ID}}
       - name: Pull changes
         run: supabase db pull --db-url "$supabase_db_url"
       - uses: stefanzweifel/git-auto-commit-action@v5
