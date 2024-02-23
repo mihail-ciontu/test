@@ -5,6 +5,8 @@ jobs:
   run_db_backup:
     runs-on: ubuntu-latest
     environment: Prod
+    permissions:
+      contents: read
     env:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
@@ -18,7 +20,7 @@ jobs:
       - name: Pull changes
         run: supabase link --project-ref ${{env.PROJECT_ID}}
       - name: Pull changes
-        run: supabase db pull --db-url "$supabase_db_url"
+        run: supabase db pull --linked
       - uses: stefanzweifel/git-auto-commit-action@v5
       - name: Push changes
         run: supabase db push --db-url "$supabase_db_url"
