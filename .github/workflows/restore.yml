@@ -30,7 +30,7 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
-          flags: ${{ vars.S3_ACTION_FLAGS }}
+          flags: "--endpoint ${{ vars.S3_ENDPOINT_URL }}"
       - name: Unzip backup.zip
         uses: montudor/action-zip@v1
         with:

@@ -1,0 +1,21 @@
+name: migrations
+on:
+  workflow_dispatch:
+jobs:
+  run_db_backup:
+    runs-on: ubuntu-latest
+    environment: Prod
+    env:
+      supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
+      SUPABASE_ACCESS_TOKEN: 'sbp_da3b05d8626d1e708ade0362d74488aebc8edc7b'
+      SUPABASE_DB_PASSWORD: 'pa^;t97BE!zk_rnN#hGSWT'
+      PROJECT_ID: 'aeqvlciwqiukwpeploax'
+    steps:
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Pull changes
+        run: supabase db pull --db-url "$supabase_db_url"
+      - uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Push changes
+        run: supabase db push --db-url "$supabase_db_url"
