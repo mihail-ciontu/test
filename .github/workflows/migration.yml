@@ -2,7 +2,7 @@ name: migrations
 on:
   workflow_dispatch:
 jobs:
-  run_db_backup:
+  migrate_db:
     runs-on: ubuntu-latest
     environment: Prod
     permissions:
@@ -24,3 +24,16 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
       - name: Push changes
         run: supabase db push --db-url "$supabase_db_url"
+  deploy:
+    needs: [migrate_db]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy to Vercel Action
+        uses: BetaHuhn/deploy-to-vercel-action@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
