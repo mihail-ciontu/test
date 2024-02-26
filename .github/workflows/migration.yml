@@ -1,6 +1,8 @@
 name: migrations
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
 jobs:
   migrate_db:
     runs-on: ubuntu-latest
@@ -27,6 +29,7 @@ jobs:
         run: supabase db push --db-url "$supabase_db_url"
   deploy:
     needs: [migrate_db]
+    environment: Prod
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
