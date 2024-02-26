@@ -5,6 +5,7 @@ jobs:
   migrate_db:
     runs-on: ubuntu-latest
     environment: Prod
+    continue-on-error: true
     permissions:
       contents: write
     env:
@@ -37,3 +38,4 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_SCOPE: 'Salt and Pepper'
