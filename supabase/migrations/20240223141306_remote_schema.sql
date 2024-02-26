@@ -1,1 +1,0 @@
-alter table "public"."users" add column "test" integer

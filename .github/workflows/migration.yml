@@ -1,4 +1,4 @@
-name: migrations
+name: deployment
 on:
   workflow_dispatch:
   push:
