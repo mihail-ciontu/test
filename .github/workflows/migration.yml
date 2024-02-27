@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['src/**']
+    paths: ['src/**', supabase/**]
 jobs:
   migrate_db:
     runs-on: ubuntu-latest
