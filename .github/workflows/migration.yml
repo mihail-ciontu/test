@@ -3,12 +3,12 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['src/**', supabase/**]
 jobs:
   migrate_db:
     runs-on: ubuntu-latest
     environment: Prod
     continue-on-error: true
+    if: ${{ github.ref_name != 'main' }}
     permissions:
       contents: write
     env:
@@ -32,6 +32,7 @@ jobs:
     needs: [migrate_db]
     environment: Prod
     runs-on: ubuntu-latest
+    if: ${{ always() && !failure() && !cancelled() }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
