@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: Prod
     continue-on-error: true
-    if: ${{ github.ref_name != 'main' }}
+    if: ${{ github.ref_name != 'mainz' }}
     permissions:
       contents: write
     env:
