@@ -7,10 +7,12 @@ on:
 jobs:
   run_db_backup:
     runs-on: ubuntu-latest
-    environment: Prod
+    environment: ${{github.event_name == 'schedule' && 'Prod' || github.ref_name}}
     env:
       supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}
     steps:
+      - uses: actions/checkout@v4
+        with: ${{github.event_name == 'schedule' && 'Prod' || github.ref_name}}
       - name: Get list of backups saved on storage
         run: |
           {
