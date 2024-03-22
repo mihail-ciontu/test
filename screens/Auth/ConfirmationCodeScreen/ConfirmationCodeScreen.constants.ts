@@ -1,0 +1,3 @@
+export const RESEND_CODE_TIMEOUT = 60;
+export const COUNTER_TIMEOUT = 1000;
+export const ADDITIONAL_KEYBOARD_OFFSET = 80;
