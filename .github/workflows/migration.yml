@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 1.136.2
       - uses: actions/checkout@v4
       - name: Pull changes
         run: supabase link --project-ref ${{env.PROJECT_ID}}
