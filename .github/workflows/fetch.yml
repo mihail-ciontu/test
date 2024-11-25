@@ -5,6 +5,7 @@ on:
 jobs:
   comment-jira-with-ios-version-info:
     runs-on: ubuntu-latest
+    environment: Prod
     env:
       JIRA_BASE_URL: ${{ vars.JIRA_BASE_URL }}
       JIRA_EMAIL: ${{ vars.JIRA_EMAIL }}
