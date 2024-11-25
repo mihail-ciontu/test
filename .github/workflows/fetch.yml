@@ -44,14 +44,14 @@ jobs:
     #         echo "No Jira ticket ID found in commit message"
     #       fi
 
-    - name: Jira push comment
-      uses: actions/jira-ticket-comment@v1.0.1
+    - name: Login
+      uses: atlassian/gajira-login@v3
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+    - name: Comment on issue
+      uses: atlassian/gajira-comment@v3
       with:
-        jira-endpoint: ${{ secrets.JIRA_BASE_URL }}
-        jira-issue-id: 'OM-596'
-        jira-account: ${{ vars.JIRA_EMAIL }}
-        jira-auth-token: ${{ secrets.JIRA_API_TOKEN }}
-        app-name: PMS
-        deploy-preview-url: https://preview-example.com
-        commit-link: "test"
-        pull-request-link: "test"
+        issue: OM-596    
+        comment: "test"
