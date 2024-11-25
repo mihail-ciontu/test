@@ -1,0 +1,64 @@
+name: fetch
+on: 
+    workflow_dispatch:
+      inputs:
+        build_ios:
+          type: boolean
+        build_android:
+          type: boolean
+        build_android_internal:
+          type: boolean
+
+jobs:
+  comment-jira-with-ios-version-info:
+    runs-on: ubuntu-latest
+    env:
+      JIRA_BASE_URL: ${{ vars.JIRA_BASE_URL }}
+      JIRA_EMAIL: ${{ vars.JIRA_EMAIL }}
+      JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+    steps:
+    #   - name: Comment Jira with iOS Version Info        
+    #     run: |
+    #       JIRA_TICKET=$(echo "${{ steps.get-commit-message.outputs.message }}" | grep -o '[A-Z]\+-[0-9]\+' || echo "")
+
+    #       if [ ! -z "$JIRA_TICKET" ]; then
+    #         # Prepare comment body with bot signature
+    #         MESSAGE="🍎 iOS Build Completed Successfully!\n\nApp Version: ${{ steps.build-ios.outputs.app_version }} (${{ steps.build-ios.outputs.build_number }})"
+
+    #         COMMENT_BODY=$(jq -n \
+    #           --arg msg "$MESSAGE" \
+    #           '{
+    #             body: {
+    #               content: [{
+    #                 content: [{
+    #                   text: $msg,
+    #                   type: "text"
+    #                 }],
+    #                 type: "paragraph"
+    #                 }],
+    #                 type: "doc",
+    #                 version: 1
+    #               }
+    #           }')
+
+    #         # Send comment to Jira
+    #         curl -X POST \
+    #           -H "Content-Type: application/json" \
+    #           -H "Authorization: Basic $(echo -n ${JIRA_EMAIL}:${JIRA_API_TOKEN} | base64)" \
+    #           "${JIRA_BASE_URL}/rest/api/3/issue/${JIRA_TICKET}/comment" \
+    #           -d "$COMMENT_BODY"
+    #       else
+    #         echo "No Jira ticket ID found in commit message"
+    #       fi
+
+    - name: Jira push comment
+      uses: actions/jira-ticket-comment@v1.0.1
+      with:
+        jira-endpoint: ${{ secrets.JIRA_BASE_URL }}
+        jira-issue-id: 'OM-596'
+        jira-account: ${{ vars.JIRA_EMAIL }}
+        jira-auth-token: ${{ secrets.JIRA_API_TOKEN }}
+        app-name: PMS
+        deploy-preview-url: https://preview-example.com
+        commit-link: "test"
+        pull-request-link: "test"
