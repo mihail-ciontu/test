@@ -1,13 +1,6 @@
 name: fetch
 on: 
-    workflow_dispatch:
-      inputs:
-        build_ios:
-          type: boolean
-        build_android:
-          type: boolean
-        build_android_internal:
-          type: boolean
+    push:
 
 jobs:
   comment-jira-with-ios-version-info:
