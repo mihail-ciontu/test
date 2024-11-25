@@ -52,3 +52,11 @@ jobs:
       with:
         issue: OM-123467    
         comment: "test"
+    - name: Test echo
+      continue-on-error: true
+      run: |
+        echo "test"
+    - name: Test echo 2
+      continue-on-error: true
+      run: |
+        echo "test 2"
