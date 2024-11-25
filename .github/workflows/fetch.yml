@@ -50,5 +50,5 @@ jobs:
     - name: Comment on issue
       uses: atlassian/gajira-comment@v3
       with:
-        issue: OM-596    
+        issue: OM-123467    
         comment: "test"
